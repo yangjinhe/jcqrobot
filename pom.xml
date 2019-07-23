@@ -9,14 +9,12 @@
     <version>1.0-SNAPSHOT</version>
 
     <name>jcq-robot</name>
-    <!-- FIXME change it to the project's website -->
-    <url>http://www.example.com</url>
+    <url>http://www.github.com</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <nutzboot.version>2.3.6.v20190621</nutzboot.version>
     </properties>
 
     <dependencies>
@@ -50,21 +48,17 @@
             <version>1.2.58</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/io.undertow/undertow-core -->
         <dependency>
             <groupId>io.undertow</groupId>
             <artifactId>undertow-core</artifactId>
             <version>2.0.22.Final</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/io.undertow/undertow-servlet -->
         <dependency>
             <groupId>io.undertow</groupId>
             <artifactId>undertow-servlet</artifactId>
             <version>2.0.22.Final</version>
         </dependency>
 
-
-        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
