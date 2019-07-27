@@ -69,9 +69,9 @@ public class SendMessageServlet extends HttpServlet {
 
             }
             if (i > 0) {
-                result = RspResult.getSuccessResult().setMsg("发送成功").setCode(i + "");
+                result = RspResult.getSuccessResult().setMsg("发送消息成功").setData(message).setCode(i + "");
             } else {
-                result = RspResult.getFailtResult("发送失败").setCode(i + "");
+                result = RspResult.getFailtResult("发送消息失败").setData(message).setCode(i + "");
             }
         }
         response.reset();

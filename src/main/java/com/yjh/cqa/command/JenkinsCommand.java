@@ -1,6 +1,7 @@
 package com.yjh.cqa.command;
 
 import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.core.util.StrUtil;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -28,6 +29,7 @@ public class JenkinsCommand extends BaseCommand {
                         "更多命令请参考官方文档");
                 return;
             }
+            String[] split = msg.split(" ");
             String command = JAVA_EXEC + " -jar " + JAVA_HOME + "\\jenkins-cli.jar -s http://172.17.0.1:8080/jenkins -auth admin:116726e6ed9b4dab1295c018c790d6f9a1 " + msg;
             String[] commandSplit = command.split(" ");
             List<String> lcommand = new ArrayList<String>();
@@ -51,10 +53,12 @@ public class JenkinsCommand extends BaseCommand {
             String resultLog = "";
             String line;
             while ((line = bs.readLine()) != null) {
-                line = CharsetUtil.convert(line, "GBK", "UTF-8");
+                if (split[0].equals("get-job")) {
+                    line = CharsetUtil.convert(line, "GBK", "UTF-8");
+                }
                 resultLog += line + "\n";
             }
-            CQ.sendGroupMsg(fromGroup, CC.at(fromQQ) + " " + msg + " 命令提交完成\n" + resultLog);
+            CQ.sendGroupMsg(fromGroup, CC.at(fromQQ) + " " + msg + " 命令提交完成" + (StrUtil.isBlank(resultLog) ? "" : "\n" + resultLog));
         } catch (Exception e) {
             CQ.logDebug("debug", e.getMessage());
             CQ.sendGroupMsg(fromGroup, CC.at(fromQQ) + " " + msg + " 命令执行异常");

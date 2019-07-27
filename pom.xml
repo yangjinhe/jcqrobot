@@ -17,6 +17,41 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
+    <profiles>
+        <profile>
+            <id>jenkins</id>
+            <activation>
+                <jdk>1.4</jdk>
+            </activation>
+            <repositories>
+                <repository>
+                    <id>nexus</id>
+                    <name>local private nexus</name>
+                    <url>https://repo.jenkins-ci.org/releases/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>nexus</id>
+                    <name>local private nexus</name>
+                    <url>https://repo.jenkins-ci.org/releases/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
+    </profiles>
+
     <dependencies>
 
         <dependency>
@@ -65,6 +100,37 @@
             <version>1.18.8</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.jenkins-ci.main/cli -->
+        <dependency>
+            <groupId>org.jenkins-ci.main</groupId>
+            <artifactId>cli</artifactId>
+            <version>2.176.2</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.sshd/sshd-core -->
+        <dependency>
+            <groupId>org.apache.sshd</groupId>
+            <artifactId>sshd-core</artifactId>
+            <version>1.7.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-jdk14 -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>1.7.25</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
+
 
     </dependencies>
 
