@@ -14,5 +14,5 @@ public abstract class BaseCommand {
     CoolQ CQ = App.CQ;
     CQCode CC = App.CC;
 
-    public abstract void exec(long fromGroup, long fromQQ, String msg);
+    public abstract void exec(Long fromGroup, long fromQQ, String msg);
 }

@@ -2,6 +2,7 @@ package com.yjh.cqa;
 
 import cn.hutool.core.lang.Singleton;
 import cn.hutool.core.thread.NamedThreadFactory;
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.StrUtil;
 import com.sobte.cqp.jcq.entity.Anonymous;
 import com.sobte.cqp.jcq.entity.CQDebug;
@@ -13,6 +14,7 @@ import com.sobte.cqp.jcq.event.JcqAppAbstract;
 import com.yjh.cqa.command.BaseCommand;
 import com.yjh.cqa.executor.StartUndertow;
 import com.yjh.cqa.util.CommandEnum;
+import com.yjh.cqa.util.NetworkMonitor;
 
 import javax.swing.*;
 import java.util.concurrent.ExecutorService;
@@ -41,6 +43,7 @@ public class App extends JcqAppAbstract implements ICQVer, IMsg, IRequest {
     public static final String JAVA_HOME = System.getProperty("java.home");
     public static final String JAVA_EXEC = JAVA_HOME + "\\bin\\java";
     private static final String BASE_PACKAGE = "com.yjh.cqa.command.";
+    private static ThreadPoolExecutor poolExecutor = ThreadUtil.newExecutor(1, 1);
 
     /**
      * 用main方法调试可以最大化的加快开发效率，检测和定位错误位置<br/>
@@ -134,6 +137,7 @@ public class App extends JcqAppAbstract implements ICQVer, IMsg, IRequest {
     public int enable() {
         enable = true;
         StartUndertow.start();
+        //poolExecutor.submit(new NetworkMonitor());
         return 0;
     }
 
@@ -167,8 +171,14 @@ public class App extends JcqAppAbstract implements ICQVer, IMsg, IRequest {
      */
     public int privateMsg(int subType, int msgId, long fromQQ, String msg, int font) {
         // 这里处理消息
-
-        CQ.sendPrivateMsg(fromQQ, msg);
+        String[] split = msg.split(":");
+        CommandEnum commandEnum = CommandEnum.getFromName(StrUtil.trim(split[0]));
+        if (null != commandEnum) {
+            BaseCommand o = Singleton.get(BASE_PACKAGE + commandEnum.getClassName());
+            o.exec(null, fromQQ, split[1]);
+        } else {
+            CQ.sendPrivateMsg(fromQQ, msg);
+        }
         return MSG_IGNORE;
     }
 
@@ -206,7 +216,7 @@ public class App extends JcqAppAbstract implements ICQVer, IMsg, IRequest {
         // 这里处理消息
         //CQ.sendGroupMsg(fromGroup, CC.at(fromQQ) + " " + msg);
         String[] split = msg.split(":");
-        CommandEnum commandEnum = CommandEnum.getFromName(split[0]);
+        CommandEnum commandEnum = CommandEnum.getFromName(StrUtil.trim(split[0]));
         if (null != commandEnum) {
             BaseCommand o = Singleton.get(BASE_PACKAGE + commandEnum.getClassName());
             o.exec(fromGroup, fromQQ, split[1]);

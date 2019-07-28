@@ -2,6 +2,7 @@ package com.yjh.cqa.command;
 
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
+import com.yjh.cqa.util.NetworkMonitor;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -16,10 +17,10 @@ import java.util.List;
 public class JenkinsCommand extends BaseCommand {
 
     @Override
-    public void exec(long fromGroup, long fromQQ, String msg) {
+    public void exec(Long fromGroup, long fromQQ, String msg) {
         try {
             if (msg.equals("help")) {
-                CQ.sendGroupMsg(fromGroup, CC.at(fromQQ) + "以下命令可用：\n" +
+                sendMsg(fromGroup, fromQQ, "以下命令可用：\n" +
                         "build job_name #构建任务\n" +
                         "list-jobs [job_name] #展示所有的任务列表，job_name参数可选 \n" +
                         "enable-job job_name #启用任务\n" +
@@ -29,6 +30,10 @@ public class JenkinsCommand extends BaseCommand {
                         "更多命令请参考官方文档");
                 return;
             }
+            /*if (!NetworkMonitor.isNetworkAvailable()) {
+                sendMsg(fromGroup, fromQQ, "连接SVN失败，请检查网络。");
+                return;
+            }*/
             String[] split = msg.split(" ");
             String command = JAVA_EXEC + " -jar " + JAVA_HOME + "\\jenkins-cli.jar -s http://172.17.0.1:8080/jenkins -auth admin:116726e6ed9b4dab1295c018c790d6f9a1 " + msg;
             String[] commandSplit = command.split(" ");
@@ -47,7 +52,7 @@ public class JenkinsCommand extends BaseCommand {
             if (p.exitValue() != 0) {
                 //说明命令执行失败
                 //可以进入到错误处理步骤中
-                CQ.sendGroupMsg(fromGroup, CC.at(fromQQ) + " " + msg + " 命令执行失败");
+                sendMsg(fromGroup, fromQQ, msg + " 命令执行失败");
                 return;
             }
             String resultLog = "";
@@ -58,10 +63,18 @@ public class JenkinsCommand extends BaseCommand {
                 }
                 resultLog += line + "\n";
             }
-            CQ.sendGroupMsg(fromGroup, CC.at(fromQQ) + " " + msg + " 命令提交完成" + (StrUtil.isBlank(resultLog) ? "" : "\n" + resultLog));
+            sendMsg(fromGroup, fromQQ, msg + " 命令提交完成" + (StrUtil.isBlank(resultLog) ? "" : "\n" + resultLog));
         } catch (Exception e) {
             CQ.logDebug("debug", e.getMessage());
-            CQ.sendGroupMsg(fromGroup, CC.at(fromQQ) + " " + msg + " 命令执行异常");
+            sendMsg(fromGroup, fromQQ, msg + " 命令执行异常");
+        }
+    }
+
+    private void sendMsg(Long fromGroup, long fromQQ, String msg) {
+        if (null != fromGroup) {
+            CQ.sendGroupMsg(fromGroup, CC.at(fromQQ) + " " + msg);
+        } else {
+            CQ.sendPrivateMsg(fromQQ, msg);
         }
     }
 
