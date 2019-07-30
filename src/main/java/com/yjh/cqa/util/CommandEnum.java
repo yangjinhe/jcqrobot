@@ -5,7 +5,8 @@ package com.yjh.cqa.util;
  */
 public enum CommandEnum {
 
-    JENKINS(1, "#jenkins", "JenkinsCommand");
+    JENKINS(1, "#jenkins", "JenkinsCommand"),
+    SYS(2, "#sys", "SysCommand");
 
     private Integer value;
     private String name;

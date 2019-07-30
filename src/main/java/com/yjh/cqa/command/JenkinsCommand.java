@@ -30,51 +30,16 @@ public class JenkinsCommand extends BaseCommand {
                         "更多命令请参考官方文档");
                 return;
             }
-            /*if (!NetworkMonitor.isNetworkAvailable()) {
-                sendMsg(fromGroup, fromQQ, "连接SVN失败，请检查网络。");
-                return;
-            }*/
-            String[] split = msg.split(" ");
-            String command = JAVA_EXEC + " -jar " + JAVA_HOME + "\\jenkins-cli.jar -s http://172.17.0.1:8080/jenkins -auth admin:116726e6ed9b4dab1295c018c790d6f9a1 " + msg;
-            String[] commandSplit = command.split(" ");
-            List<String> lcommand = new ArrayList<String>();
-            Collections.addAll(lcommand, commandSplit);
-            CQ.logDebug("debug", msg + " 命令开始执行");
-            //CQ.sendGroupMsg(fromGroup, CC.at(fromQQ) + " " + param + " 命令开始执行");
-
-            ProcessBuilder processBuilder = new ProcessBuilder(lcommand);
-            processBuilder.redirectErrorStream(true);
-            Process p = processBuilder.start();
-            InputStream is = p.getInputStream();
-            BufferedReader bs = new BufferedReader(new InputStreamReader(is));
-
-            p.waitFor();
-            if (p.exitValue() != 0) {
-                //说明命令执行失败
-                //可以进入到错误处理步骤中
-                sendMsg(fromGroup, fromQQ, msg + " 命令执行失败");
-                return;
+            if (!NetworkMonitor.isNetworkAvailable()) {
+                sendMsg(fromGroup, fromQQ, "svn连接失败，请检查网络！");
             }
-            String resultLog = "";
-            String line;
-            while ((line = bs.readLine()) != null) {
-                if (split[0].equals("get-job")) {
-                    line = CharsetUtil.convert(line, "GBK", "UTF-8");
-                }
-                resultLog += line + "\n";
+            String resultLog = executeJenkinsCmd(msg, fromGroup, fromQQ);
+            if (null != resultLog) {
+                sendMsg(fromGroup, fromQQ, msg + " 命令提交完成" + (StrUtil.isBlank(resultLog) ? "" : "\n" + resultLog));
             }
-            sendMsg(fromGroup, fromQQ, msg + " 命令提交完成" + (StrUtil.isBlank(resultLog) ? "" : "\n" + resultLog));
         } catch (Exception e) {
             CQ.logDebug("debug", e.getMessage());
             sendMsg(fromGroup, fromQQ, msg + " 命令执行异常");
-        }
-    }
-
-    private void sendMsg(Long fromGroup, long fromQQ, String msg) {
-        if (null != fromGroup) {
-            CQ.sendGroupMsg(fromGroup, CC.at(fromQQ) + " " + msg);
-        } else {
-            CQ.sendPrivateMsg(fromQQ, msg);
         }
     }
 

@@ -18,7 +18,9 @@ import com.yjh.cqa.util.NetworkMonitor;
 
 import javax.swing.*;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -43,7 +45,8 @@ public class App extends JcqAppAbstract implements ICQVer, IMsg, IRequest {
     public static final String JAVA_HOME = System.getProperty("java.home");
     public static final String JAVA_EXEC = JAVA_HOME + "\\bin\\java";
     private static final String BASE_PACKAGE = "com.yjh.cqa.command.";
-    private static ThreadPoolExecutor poolExecutor = ThreadUtil.newExecutor(1, 1);
+    private static ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+
 
     /**
      * 用main方法调试可以最大化的加快开发效率，检测和定位错误位置<br/>
@@ -123,6 +126,7 @@ public class App extends JcqAppAbstract implements ICQVer, IMsg, IRequest {
      */
     public int exit() {
         StartUndertow.stop();
+        executorService.shutdown();
         return 0;
     }
 
@@ -137,7 +141,7 @@ public class App extends JcqAppAbstract implements ICQVer, IMsg, IRequest {
     public int enable() {
         enable = true;
         StartUndertow.start();
-        //poolExecutor.submit(new NetworkMonitor());
+        executorService.scheduleWithFixedDelay(new NetworkMonitor(), 1, 5, TimeUnit.SECONDS);
         return 0;
     }
 
@@ -152,6 +156,7 @@ public class App extends JcqAppAbstract implements ICQVer, IMsg, IRequest {
     public int disable() {
         enable = false;
         StartUndertow.stop();
+        executorService.shutdown();
         return 0;
     }
 
