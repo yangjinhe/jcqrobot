@@ -1,16 +1,12 @@
 package com.yjh.cqa.util;
 
-import cn.hutool.core.convert.Convert;
-import cn.hutool.http.HttpUtil;
-import com.yjh.cqa.App;
-
 import java.net.URL;
 import java.net.URLConnection;
 
 public class NetworkMonitor implements Runnable {
 
-    private String m_strUrl = "http://192.168.74.15:8866";
     private static boolean m_bNetworkAvailable = false;
+    private String m_strUrl = "http://192.168.74.15:8866";
 
     public NetworkMonitor() {
     }

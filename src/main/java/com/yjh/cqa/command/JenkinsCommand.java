@@ -1,15 +1,7 @@
 package com.yjh.cqa.command;
 
-import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import com.yjh.cqa.util.NetworkMonitor;
-
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by yangjh on 2019/7/20.
@@ -32,6 +24,7 @@ public class JenkinsCommand extends BaseCommand {
             }
             if (!NetworkMonitor.isNetworkAvailable()) {
                 sendMsg(fromGroup, fromQQ, "svn连接失败，请检查网络！");
+                return;
             }
             String resultLog = executeJenkinsCmd(msg, fromGroup, fromQQ);
             if (null != resultLog) {

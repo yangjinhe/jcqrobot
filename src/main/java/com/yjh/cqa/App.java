@@ -1,8 +1,6 @@
 package com.yjh.cqa;
 
 import cn.hutool.core.lang.Singleton;
-import cn.hutool.core.thread.NamedThreadFactory;
-import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.StrUtil;
 import com.sobte.cqp.jcq.entity.Anonymous;
 import com.sobte.cqp.jcq.entity.CQDebug;
@@ -17,11 +15,8 @@ import com.yjh.cqa.util.CommandEnum;
 import com.yjh.cqa.util.NetworkMonitor;
 
 import javax.swing.*;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /***
@@ -84,6 +79,10 @@ public class App extends JcqAppAbstract implements ICQVer, IMsg, IRequest {
         // 以下是收尾触发函数
         // demo.disable();// 实际过程中程序结束不会触发disable，只有用户关闭了此插件才会触发
         demo.exit();// 最后程序运行结束，调用exit方法
+    }
+
+    public static int sendPrivateMsg(long qqId, String msg) {
+        return CQ.sendPrivateMsg(qqId, msg);
     }
 
     /**
@@ -405,10 +404,6 @@ public class App extends JcqAppAbstract implements ICQVer, IMsg, IRequest {
     public int menuB() {
         JOptionPane.showMessageDialog(null, "这是测试菜单B，可以在这里加载窗口");
         return 0;
-    }
-
-    public static int sendPrivateMsg(long qqId, String msg) {
-        return CQ.sendPrivateMsg(qqId, msg);
     }
 
 }

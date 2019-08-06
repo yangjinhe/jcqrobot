@@ -1,8 +1,4 @@
-
 package com.yjh.cqa.controller;
-
-import com.yjh.cqa.App;
-import com.yjh.cqa.vo.RspResult;
 
 /**
  * Created by yangjh on 2019/7/22.

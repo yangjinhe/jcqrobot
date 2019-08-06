@@ -37,7 +37,6 @@ public enum CommandEnum {
     }
 
 
-
     public Integer getValue() {
         return value;
     }

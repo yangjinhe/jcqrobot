@@ -13,8 +13,16 @@ public final class RspResult implements Serializable {
     private Object data;
     private List errors;
 
-    public String getRsphead() {
-        return "s";
+    public static RspResult getSuccessResult() {
+        RspResult result = new RspResult();
+        result.setSuccess(true);
+        return result;
+    }
+
+    public static RspResult getFailtResult(String errMsg) {
+        RspResult result = new RspResult();
+        result.setSuccess(false).setMsg(errMsg);
+        return result;
     }
 
     public boolean isSuccess() {
@@ -51,18 +59,6 @@ public final class RspResult implements Serializable {
     public RspResult setData(Object data) {
         this.data = data;
         return this;
-    }
-
-    public static RspResult getSuccessResult() {
-        RspResult result = new RspResult();
-        result.setSuccess(true);
-        return result;
-    }
-
-    public static RspResult getFailtResult(String errMsg) {
-        RspResult result = new RspResult();
-        result.setSuccess(false).setMsg(errMsg);
-        return result;
     }
 
     public List getErrors() {

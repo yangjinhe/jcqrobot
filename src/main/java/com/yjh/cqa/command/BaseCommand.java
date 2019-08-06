@@ -17,12 +17,11 @@ import java.util.List;
  */
 public abstract class BaseCommand {
 
+    static String jenkinsBaseUrl = "-s http://172.17.0.1:8080/jenkins -auth admin:116726e6ed9b4dab1295c018c790d6f9a1";
     String JAVA_EXEC = App.JAVA_EXEC;
     String JAVA_HOME = App.JAVA_HOME;
     CoolQ CQ = App.CQ;
     CQCode CC = App.CC;
-
-    static String jenkinsBaseUrl = "-s http://172.17.0.1:8080/jenkins -auth admin:116726e6ed9b4dab1295c018c790d6f9a1";
 
     public abstract void exec(Long fromGroup, long fromQQ, String msg);
 

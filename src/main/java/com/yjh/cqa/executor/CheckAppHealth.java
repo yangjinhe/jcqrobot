@@ -11,14 +11,7 @@ import java.util.concurrent.Executors;
 
 public class CheckAppHealth implements Runnable {
     private static ExecutorService fixedThreadPool = Executors.newFixedThreadPool(6);
-
-    private CoolQ CQ;
-
     private static List<UrlVo> urlVoList = new ArrayList<UrlVo>();
-
-    public CheckAppHealth(CoolQ CQ) {
-        this.CQ = CQ;
-    }
 
     static {
         urlVoList.add(new UrlVo("http://10.183.7.25/efmp-common-web/pub/qryArea", "{\"level\":\"1\"}"));
@@ -29,32 +22,11 @@ public class CheckAppHealth implements Runnable {
         urlVoList.add(new UrlVo("http://10.183.7.25/psm/privilege/profile/queryOperationSpec.action", "{\"requirePaging\":true,\"currentPage\":1,\"rowNumPerPage\":1,\"operationSpecCd\":\"123\"}"));
     }
 
-    static class UrlVo {
-        private String url;
-        private String param;
+    private CoolQ CQ;
 
-        public String getUrl() {
-            return url;
-        }
-
-        public void setUrl(String url) {
-            this.url = url;
-        }
-
-        public String getParam() {
-            return param;
-        }
-
-        public void setParam(String param) {
-            this.param = param;
-        }
-
-        public UrlVo(String url, String param) {
-            this.url = url;
-            this.param = param;
-        }
+    public CheckAppHealth(CoolQ CQ) {
+        this.CQ = CQ;
     }
-
 
     @Override
     public void run() {
@@ -78,6 +50,32 @@ public class CheckAppHealth implements Runnable {
             } catch (IOException e) {
                 CQ.logDebug("exception", e.getMessage());
             }
+        }
+    }
+
+    static class UrlVo {
+        private String url;
+        private String param;
+
+        public UrlVo(String url, String param) {
+            this.url = url;
+            this.param = param;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
+        public String getParam() {
+            return param;
+        }
+
+        public void setParam(String param) {
+            this.param = param;
         }
     }
 }
